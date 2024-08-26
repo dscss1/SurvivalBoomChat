@@ -10,11 +10,12 @@ import org.jetbrains.annotations.NotNull;
 public class IgnoreCommand {
 
     public static void command(@NotNull CommandSender sender, String[] args)  {
-        if (!(sender instanceof Player)) {
-            Player player = (Player) sender;
-            if (!sender.hasPermission("sbchat.ignore")) {
-                if (args.length == 0) {
-                    Player p = Bukkit.getPlayer(args[0]);
+        if (!(sender instanceof Player player)) {
+            return;
+        }
+            if (!player.hasPermission("sbchat.ignore")) {
+                if (args.length == 1) {
+                    @SuppressWarnings("DataFlowIssue") Player p = Bukkit.getPlayer(args[1]);
                     if (p != null) {
                         PluginMessages.sendMessage(player, PluginMessages.getMessage("ignore-player-not-found").replace("{player}", p.getName()));
                         return;
@@ -35,8 +36,9 @@ public class IgnoreCommand {
                 } else {
                     PluginMessages.sendMessage(player, PluginMessages.getMessage("ignore-syntax"));
                 }
+            } else {
+                PluginMessages.sendMessage(player, PluginMessages.getMessage("no-permission".replace("{PERMISSION}", "sbchat.ignore")));
             }
         }
     }
 
-}
